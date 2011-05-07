@@ -84,7 +84,7 @@ function! OptionsCommentTree(line)
   " iterate settings and create description tree
   let l:vert_count = len(settings)
   let l:cnt = 0
-  for o in split(settings, '\zs')
+  for o in reverse(split(settings, '\zs'))
     let l:verts = repeat('|', vert_count - cnt - 1) . 'l'
     let l:desc_line = comment_line . verts . '-- '. s:option_settings['cpoptions'][o]
     call append(line('.') + cnt, desc_line)
@@ -103,4 +103,3 @@ finish
 set cpoptions=aABceFsmq
 
     set cpoptions=aABceFsmq
-
