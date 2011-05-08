@@ -110,6 +110,7 @@ function! RemoveTree(line) "{{{1
   exec (a:line + 1).','.end.'d'
 endfunction
 
+command! -bar OptionTree silent call RemoveTree(line('.'))|silent call OptionsCommentTree(line('.'))
 finish "{{{1
 
 " call it on an options line (later we can do this for all lines in a range) with:
