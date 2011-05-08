@@ -67,29 +67,30 @@ let s:opts = {
   \ 'actionable_line': '^\s*:\?set\?\s\+\S\+\s*=\s*\S',
   \ 'tree_line'      : '^\s*":-D\s\+\%(|\|`\)',
   \ 'tree_vert_line' : '|',
-  \ 'tree_line_bend' : 'l',
+  \ 'tree_line_bend' : '`',
   \ 'tree_horz_line' : '-',
   \ 'tree_horz_min'  : 2,
   \ 'tree_horz_sep'  : ' ',
   \}
 
 function! OptionsCommentTree(line)
-  let l:line = a:line
+  let l:line = getline(a:line)
   if line !~ s:opts['actionable_line']
     "Not an option line... skip
     return
   endif
-  let [l:indent, l:settings_gap] = map(matchlist(line, '^\(\s*\)\(:\?set\s*\S\+\s*=\s*\)')[1:2], 'strlen(v:val)')
-  let l:settings = matchlist(line, '^\s*:\?set\s*\S\+\s*=\s*\(.*\)')[1]
+  let [l:indent, l:settings_gap] = map(matchlist(line, '^\(\s*\)\(:\?set\?\s*\S\+\s*=\s*\)')[1:2], 'strlen(v:val)')
+  let l:settings = matchlist(line, '^\s*:\?set\?\s*\S\+\s*=\s*\(.*\)')[1]
   echo indent . ' ' . settings_gap
-  let settings_gap -= 1
+  let settings_gap -= len(s:opts['comment_leader'])
   let l:comment_line = repeat(' ', indent) . s:opts['comment_leader'] . repeat(' ', settings_gap)
   " iterate settings and create description tree
   let l:vert_count = len(settings)
   let l:cnt = 0
   for o in reverse(split(settings, '\zs'))
-    let l:verts = repeat('|', vert_count - cnt - 1) . 'l'
-    let l:desc_line = comment_line . verts . '-- '. s:option_settings['cpoptions'][o]
+    let l:verts = repeat('|', vert_count - cnt - 1) .s:opts['tree_line_bend']
+    let l:desc_line = comment_line . verts . repeat(s:opts['tree_horz_line'], s:opts['tree_horz_min']) .
+          \ s:opts['tree_horz_sep'] . s:option_settings['cpoptions'][o]
     call append(line('.') + cnt, desc_line)
     let cnt += 1
   endfor
@@ -119,6 +120,6 @@ finish "{{{1
 " Don't operate on commented lines:
 "set cpoptions=aABceFsmq
 "    set cpoptions=aABceFsmq
-set cpoptions=aABceFsmq
+:se cpoptions=aABceFsmq
 
     set cpoptions=aABceFsmq
