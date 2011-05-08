@@ -1,3 +1,4 @@
+" Description's dict {{{1
 let s:option_settings = {
       \'cpoptions' : {
       \  'a' : ':read updates alternative file name',
@@ -59,6 +60,7 @@ let s:option_settings = {
       \},
       \}
 
+" Options {{{1
 let s:opts = {
   \ 'comment_leader' : '"',
   \ 'comment_trailer': '',
@@ -92,7 +94,7 @@ function! OptionsCommentTree(line)
   endfor
 endfunction
 
-finish
+finish "{{{1
 
 " call it on an options line (later we can do this for all lines in a range) with:
 " call OptionsCommentTree(getline('.'))
