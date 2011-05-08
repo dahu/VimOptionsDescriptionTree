@@ -64,7 +64,7 @@ let s:option_settings = {
 let s:opts = {
   \ 'comment_leader' : '":-D',
   \ 'comment_trailer': '',
-  \ 'actionable_line': '^\s*set\s\+\S\+\s*=\s*\S',
+  \ 'actionable_line': '^\s*:\?set\?\s\+\S\+\s*=\s*\S',
   \ 'tree_line'      : '^\s*":-D\s\+\%(|\|`\)',
   \ 'tree_vert_line' : '|',
   \ 'tree_line_bend' : 'l',
@@ -79,8 +79,8 @@ function! OptionsCommentTree(line)
     "Not an option line... skip
     return
   endif
-  let [l:indent, l:settings_gap] = map(matchlist(line, '^\(\s*\)\(set\s*\S\+\s*=\s*\)')[1:2], 'strlen(v:val)')
-  let l:settings = matchlist(line, '^\s*set\s*\S\+\s*=\s*\(.*\)')[1]
+  let [l:indent, l:settings_gap] = map(matchlist(line, '^\(\s*\)\(:\?set\s*\S\+\s*=\s*\)')[1:2], 'strlen(v:val)')
+  let l:settings = matchlist(line, '^\s*:\?set\s*\S\+\s*=\s*\(.*\)')[1]
   echo indent . ' ' . settings_gap
   let settings_gap -= 1
   let l:comment_line = repeat(' ', indent) . s:opts['comment_leader'] . repeat(' ', settings_gap)
