@@ -62,9 +62,10 @@ let s:option_settings = {
 
 " Options {{{1
 let s:opts = {
-  \ 'comment_leader' : '"',
+  \ 'comment_leader' : '":-D',
   \ 'comment_trailer': '',
   \ 'actionable_line': '^\s*set\s\+\S\+\s*=\s*\S',
+  \ 'tree_line'      : '^\s*":-D\s\+\%(|\|`\)',
   \ 'tree_vert_line' : '|',
   \ 'tree_line_bend' : 'l',
   \ 'tree_horz_line' : '-',
@@ -92,6 +93,21 @@ function! OptionsCommentTree(line)
     call append(line('.') + cnt, desc_line)
     let cnt += 1
   endfor
+endfunction
+
+function! RemoveTree(line) "{{{1
+  if getline(a:line) !~ s:opts['actionable_line']
+    "Not an option line... skip
+    return
+  endif
+  let end = a:line
+  while getline(end + 1) =~ '\m\C'.s:opts['tree_line']
+    let end += 1
+  endwhile
+  if end == a:line
+    return
+  endif
+  exec (a:line + 1).','.end.'d'
 endfunction
 
 finish "{{{1
